@@ -2,7 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
   name: kro
-  namespace: kro-system
+  namespace: flux-system
 spec:
   interval: 1h0m0s
   url: oci://ghcr.io/kro-run/kro/kro
@@ -13,8 +13,11 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: kro
-  namespace: kro-system
+  namespace: flux-system
 spec:
+  releaseName: kro
+  targetNamespace: kro-system
+
   interval: 1m0s
   
   driftDetection:
