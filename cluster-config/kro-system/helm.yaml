@@ -28,5 +28,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: kro
+    namespace: flux-system
   
   values:
