@@ -3,5 +3,5 @@ kind: Kustomization
 metadata:
   name: workloads
 resources:
-- namespace.yaml
-- workload.yaml
+#- namespace.yaml
+#- workload.yaml
