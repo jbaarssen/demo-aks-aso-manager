@@ -31,7 +31,7 @@ spec:
         metadata:
           name: ${schema.spec.name}-aks-mi
         spec:
-          location: ${schema.spec.location}
+          location: ${schema.spec.region}
           owner:
             name: ${resourceGroup.status.name}
 
@@ -42,7 +42,7 @@ spec:
         metadata:
           name: ${schema.spec.name}-aks
         spec:
-          location: ${schema.spec.location}
+          location: ${schema.spec.region}
           nodeResourceGroup: ${schema.spec.name}-node-rg
           sku:
             name: Base
