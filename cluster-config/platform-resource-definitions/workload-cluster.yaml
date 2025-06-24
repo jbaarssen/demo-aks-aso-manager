@@ -1,0 +1,116 @@
+apiVersion: kro.run/v1alpha1
+kind: ResourceGraphDefinition
+metadata:
+  name: workload-cluster
+  namespace: platform-resources
+spec:
+  schema:
+    apiVersion: v1alpha1
+    kind: WorkloadCluster
+    spec:
+      name: string
+      repository: string
+      region: string
+      kubernetesVersion: string | default="1.31.7"
+      nodeSKU: string | default="Standard_B2S_v2"
+
+  resources:
+    - id: resourceGroup
+      template: 
+        apiVersion: resources.azure.com/v1api20200601
+        kind: ResourceGroup
+        metadata:
+          name: ${schema.spec.name}-rg
+        spec:
+          location: ${schema.spec.region}
+
+    - id: managedIdentity
+      template:
+        apiVersion: managedidentity.azure.com/v1api20230131
+        kind: UserAssignedIdentity
+        metadata:
+          name: ${schema.spec.name}-aks-mi
+        spec:
+          location: ${schema.spec.location}
+          owner:
+            name: ${resourceGroup.status.name}
+
+    - id: cluster
+      template:
+        apiVersion: containerservice.azure.com/v1api20240901
+        kind: ManagedCluster
+        metadata:
+          name: ${schema.spec.name}-aks
+        spec:
+          location: ${schema.spec.location}
+          nodeResourceGroup: ${schema.spec.name}-node-rg
+          sku:
+            name: Base
+            tier: Free
+          
+          owner:
+            name: ${resourceGroup.status.name}
+
+          dnsPrefix: ${schema.spec.name}-dns
+
+          kubernetesVersion: ${schema.spec.kubernetesVersion}
+
+          oidcIssuerProfile:
+            enabled: true
+
+          securityProfile:
+            workloadIdentity:
+              enabled: true
+
+          networkProfile:
+            networkPolicy: cilium
+            networkPlugin: azure
+            networkPluginMode: overlay
+            networkDataplane: cilium
+          
+          identity:
+            type: UserAssigned
+            userAssignedIdentities:
+              - ${managedIdentity.status.id}
+
+    - id: fluxExtension
+      template:
+        apiVersion: kubernetesconfiguration.azure.com/v1api20241101
+        kind: Extension
+        metadata:
+          name: flux-extension
+        spec:
+          extensionType: Microsoft.Flux
+          autoUpgradeMinorVersion: true
+          owner:
+            group: containerservice.azure.com
+            kind: ManagedCluster
+            name: ${cluster.status.name}
+          scope:
+            cluster:
+              releaseNamespace: flux-system
+          
+
+    - id: fluxConfiguration
+      template:
+        apiVersion: kubernetesconfiguration.azure.com/v1api20241101
+        kind: FluxConfiguration
+        metadata:
+          name: ${schema.spec.name}-flux
+        spec:
+          scope: Cluster
+          sourceKind: GitRepository
+          namespace: flux-system
+          gitRepository: 
+            provider: Generic
+            repositoryRef:
+              branch: main
+            url: ${schema.spec.repository}
+          kustomizations:
+            workload-cluster-config:
+              path: ./workload-cluster
+              prune: true
+          owner:
+            group: containerservice.azure.com
+            kind: ManagedCluster
+            name: ${cluster.status.name}
