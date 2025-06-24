@@ -33,6 +33,8 @@ spec:
       version: "2.13.0"
   
   values:
+    createAzureOperatorSecret: false
+
     multitenant:
       enabled: false
 
