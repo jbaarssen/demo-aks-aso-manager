@@ -17,6 +17,7 @@ spec:
   targetNamespace: azure-service-operator-system
 
   interval: 1m0s
+  timeout: 10m0s
   
   driftDetection:
     mode: enabled
