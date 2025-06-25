@@ -5,7 +5,7 @@ metadata:
   namespace: workloads
 spec:
   name: demo-workload
-  repository: "https://git@github.com/jbaarssen/demo-aks-aso-workload.git"
+  repository: "https://github.com/jbaarssen/demo-aks-aso-workload"
   region: "westeurope"
   kubernetesVersion: "1.32.1"
   subscriptionId: f6b50b84-d224-4b8d-9dda-64eba46c602a
