@@ -36,6 +36,8 @@ spec:
   values:
     createAzureOperatorSecret: false
 
+    useWorkloadIdentityAuth: true
+
     multitenant:
       enabled: false
 
