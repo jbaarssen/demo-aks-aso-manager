@@ -105,7 +105,7 @@ spec:
         metadata:
           name: ${schema.spec.name}-flux
         spec:
-          scope: Cluster
+          scope: cluster
           sourceKind: GitRepository
           namespace: flux-system
           gitRepository: 
