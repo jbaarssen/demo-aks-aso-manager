@@ -33,7 +33,7 @@ spec:
         spec:
           location: ${schema.spec.region}
           owner:
-            name: ${resourceGroup.status.name}
+            name: ${schema.spec.name}-rg
 
     - id: cluster
       template:
