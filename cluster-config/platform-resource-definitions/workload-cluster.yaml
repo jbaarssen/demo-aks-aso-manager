@@ -3,6 +3,9 @@ kind: ResourceGraphDefinition
 metadata:
   name: workload-cluster
   namespace: platform-resources
+  labels:
+    kustomize.toolkit.fluxcd.io/name: cluster-config-cluster-config
+    kustomize.toolkit.fluxcd.io/namespace: flux-system
 spec:
   schema:
     apiVersion: v1alpha1
@@ -72,7 +75,10 @@ spec:
           identity:
             type: UserAssigned
             userAssignedIdentities:
-              - /subscriptions/${schema.spec.subscriptionId}/resourceGroups/${schema.spec.name}-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${schema.spec.name}-aks-mi
+            - reference:
+                group: managedidentity.azure.com
+                kind: UserAssignedIdentity
+                name: ${schema.spec.name}-aks-mi
 
     - id: fluxExtension
       template:
