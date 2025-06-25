@@ -71,7 +71,7 @@ spec:
           identity:
             type: UserAssigned
             userAssignedIdentities:
-              - ${managedIdentity.status.properties.id}
+              - ${managedIdentity.status.id}
 
     - id: fluxExtension
       template:
@@ -85,7 +85,7 @@ spec:
           owner:
             group: containerservice.azure.com
             kind: ManagedCluster
-            name: ${cluster.status.properties.name}
+            name: ${cluster.status.name}
           scope:
             cluster:
               releaseNamespace: flux-system
@@ -113,4 +113,4 @@ spec:
           owner:
             group: containerservice.azure.com
             kind: ManagedCluster
-            name: ${cluster.status.properties.name}
+            name: ${cluster.status.name}
