@@ -126,7 +126,7 @@ spec:
             url: ${schema.spec.repository}
           kustomizations:
             workload-cluster-config:
-              path: ./workload-cluster
+              path: ./workload-config
               prune: true
           owner:
             group: containerservice.azure.com
