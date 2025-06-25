@@ -79,6 +79,17 @@ spec:
                 group: managedidentity.azure.com
                 kind: UserAssignedIdentity
                 name: ${schema.spec.name}-aks-mi
+          
+          agentPoolProfiles:
+            - name: nodepool1
+              count: 1
+              vmSize: "${schema.spec.nodeSKU}"
+              osType: Linux
+              mode: System
+              availabilityZones:
+                - "1"
+                - "2"
+                - "3"
 
     - id: fluxExtension
       template:
