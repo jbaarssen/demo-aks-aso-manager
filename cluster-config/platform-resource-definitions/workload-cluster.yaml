@@ -13,6 +13,7 @@ spec:
       region: string
       kubernetesVersion: string | default="1.31.7"
       nodeSKU: string | default="Standard_B2S_v2"
+      subscriptionId: string
 
   resources:
     - id: resourceGroup
@@ -71,7 +72,7 @@ spec:
           identity:
             type: UserAssigned
             userAssignedIdentities:
-              - ${managedIdentity.status.id}
+              - /subscriptions/${schema.spec.subscriptionId}/resourceGroups/${schema.spec.name}-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${schema.spec.name}-aks-mi
 
     - id: fluxExtension
       template:
@@ -85,7 +86,7 @@ spec:
           owner:
             group: containerservice.azure.com
             kind: ManagedCluster
-            name: ${cluster.status.name}
+            name: ${cluster.metadata.name}
           scope:
             cluster:
               releaseNamespace: flux-system
@@ -113,4 +114,4 @@ spec:
           owner:
             group: containerservice.azure.com
             kind: ManagedCluster
-            name: ${cluster.status.name}
+            name: ${cluster.metadata.name}
