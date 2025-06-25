@@ -3,5 +3,5 @@ kind: Kustomization
 metadata:
   name: platform-resources
 resources:
-#- namespace.yaml
-#- workload-cluster.yaml
+- namespace.yaml
+- workload-cluster.yaml
