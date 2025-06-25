@@ -49,7 +49,7 @@ spec:
             tier: Free
           
           owner:
-            name: ${schema.spec.name}-aks-mi
+            name: ${schema.spec.name}-rg
 
           dnsPrefix: ${schema.spec.name}-dns
 
@@ -71,7 +71,7 @@ spec:
           identity:
             type: UserAssigned
             userAssignedIdentities:
-              - ${managedIdentity.status.id}
+              - ${managedIdentity.status.properties.id}
 
     - id: fluxExtension
       template:
@@ -85,7 +85,7 @@ spec:
           owner:
             group: containerservice.azure.com
             kind: ManagedCluster
-            name: ${cluster.status.name}
+            name: ${cluster.status.properties.name}
           scope:
             cluster:
               releaseNamespace: flux-system
@@ -113,4 +113,4 @@ spec:
           owner:
             group: containerservice.azure.com
             kind: ManagedCluster
-            name: ${cluster.status.name}
+            name: ${cluster.status.properties.name}
